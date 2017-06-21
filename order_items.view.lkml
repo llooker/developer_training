@@ -95,6 +95,21 @@ view: order_items {
     drill_fields: [detail*]
   }
 
+  measure: order_count{
+    type:  count_distinct
+    sql: ${order_id} ;;
+  }
+
+  measure: total_sale_price {
+    type: sum
+    sql: ${sale_price} ;;
+  }
+
+  measure: avg_sale_price {
+    type: average
+    sql: ${sale_price} ;;
+  }
+
   # ----- Sets of fields for drilling ------
   set: detail {
     fields: [
