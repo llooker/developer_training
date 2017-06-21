@@ -63,6 +63,7 @@ view: order_items {
   dimension: sale_price {
     type: number
     sql: ${TABLE}.sale_price ;;
+    hidden: yes
   }
 
   dimension_group: shipped {
@@ -90,9 +91,41 @@ view: order_items {
     sql: ${TABLE}.user_id ;;
   }
 
+
+########## Measure ###############
+
   measure: count {
     type: count
     drill_fields: [detail*]
+  }
+
+  measure: order_count {
+    type: count_distinct
+    sql: ${order_id} ;;
+  }
+
+  measure: total_sale_price {
+    type: sum
+    sql: ${sale_price} ;;
+    drill_fields: [detail*]
+  }
+
+  measure: avg_sale_price {
+    type: average
+    sql: ${sale_price} ;;
+  }
+
+  measure: gross_profit {
+    type: number
+    sql: ${total_sale_price} - ${inventory_items.total_cost} ;;
+  }
+
+  measure: avg_spend_per_user {
+    type: number
+    sql: ${total_sale_price}/${users.count} ;;
+    value_format_name: usd
+    description: "This measure is the Total Sale Price divided by the Total User Count"
+#     view_label: "Users"
   }
 
   # ----- Sets of fields for drilling ------
@@ -105,5 +138,9 @@ view: order_items {
       inventory_items.id,
       inventory_items.product_name
     ]
+    }
+
+    set: order {
+      fields: [order_id]
   }
 }

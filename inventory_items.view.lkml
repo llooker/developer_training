@@ -10,6 +10,7 @@ view: inventory_items {
   dimension: cost {
     type: number
     sql: ${TABLE}.cost ;;
+    hidden: yes
   }
 
   dimension_group: created {
@@ -48,7 +49,6 @@ view: inventory_items {
 
   dimension: product_id {
     type: number
-    # hidden: yes
     sql: ${TABLE}.product_id ;;
   }
 
@@ -84,5 +84,20 @@ view: inventory_items {
   measure: count {
     type: count
     drill_fields: [id, product_name, products.id, products.name, order_items.count]
+  }
+
+  measure: product_count {
+    type: count_distinct
+    sql: ${product_id} ;;
+  }
+
+  measure: total_cost {
+    type: sum
+    sql: ${cost} ;;
+  }
+
+  measure: avg_cost {
+    type: average
+    sql: ${cost} ;;
   }
 }
