@@ -7,3 +7,5 @@ include: "*.view"
 include: "*.dashboard"
 
 explore: users {}
+
+explore: events {}
